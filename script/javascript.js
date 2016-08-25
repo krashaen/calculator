@@ -1,78 +1,83 @@
 var numbers = [];
 var innerNumber = '';
-var operation = '';
+var operation = null;
 var operationResult = null;
+var historyElrment = document.getElementById('calcHistoty');
+var resultElement = document.getElementById('equalResult');
 
-function onButtonClick (obj) {       
+function onButtonClick (obj) {
     var m = obj.getAttribute('data-digit');
-    
+
     if (m) {
-        document.getElementById('calcHistoty').textContent += m;
-        innerNumber += m;
+        if (operationResult == null) {
+            historyElrment.textContent += m;
+            innerNumber += m;
+        } else {
+            historyElrment.textContent = operationResult;
+            historyElrment.textContent += m;
+            innerNumber += m;
+            operationResult = null;
+        }
     }
 
     return innerNumber;
 }
 
 function getNumberOfElement (obj) {
-    var lastnumber = parseInt(onButtonClick(obj));
+    var lastnumber = parseInt(innerNumber);
 
-    numbers.push(lastnumber);
-    innerNumber = '';
+    if (isNaN(lastnumber)) {
+        innerNumber = '';
+        return;
+    } else {
+        numbers.push(lastnumber);
+        innerNumber = '';
+    }
 }
 
 function onPlusClick (obj){
-    operation = 'plus';
+    if (operation != null) return;
+    onButtonClick (obj);
+    operation = addition;
     getNumberOfElement (obj);
-    if (numbers.length >= 2) onEqualClick (obj);
 }
 
 function onMinusClick(obj) {
-    operation = 'minus';
+    if (operation != null) return;
+    onButtonClick (obj);
+    operation = subtraction;
     getNumberOfElement (obj);
 }
 
 function onMultiplateClick(obj) {
-    operation = 'multiplate';
+    if (operation != null) return;
+    onButtonClick (obj);
+    operation = multiplate;
     getNumberOfElement (obj);
 }
 
 function onDivClick(obj) {
-    operation = 'div';
+    if (operation != null) return;
+    onButtonClick (obj);
+    operation = division;
     getNumberOfElement (obj);
 }
 
 function onResetClick(obj) {
     var m = obj.getAttribute('data-digit');
-    var historyElement = document.getElementById('calcHistoty');
-    var equalResult = document.getElementById('equalResult');
 
-    historyElement.textContent = m;
-    equalResult.value = '0';
+    historyElrment.textContent = m;
+    resultElement.value = '0';
     numbers = [];
     operationResult = null;
 }
 
 function onEqualClick (obj) {
-    var element = document.getElementById('equalResult');
-    
+    var c = null;
     getNumberOfElement (obj);
-    switch (operation) {
-        case 'plus':
-            c = addition(numbers);
-            break;
-        case 'minus':
-            c = subtraction(numbers);
-            break;
-        case 'multiplate':
-            c = multiplate(numbers);
-            break;
-        case 'div':
-            if (numbers[numbers.length-1]==0) {
-                c = 'eror';
-            } else {
-                c = division(numbers);
-            }
-    }
-    element.value = c;
+    c = operation(numbers);
+    resultElement.value = c;
+    numbers = [];
+    numbers[0] = c;
+    operation = null;
 }

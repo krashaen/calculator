@@ -43,7 +43,7 @@ function multiplate (numbers) {
     } else {
         first=operationResult;
     }
-    
+
     second = numbers[numbers.length-1];
     result = first * second;
     operationResult = result;
@@ -61,9 +61,14 @@ function division (numbers) {
     } else {
         first = operationResult;
     }
-    
+
     second = numbers[numbers.length-1];
-    result = first / second;
+    if (second == 0) {
+        result = "Eror";
+    } else {
+        result = first / second;
+    }
+
     operationResult = result;
 
     return result;
