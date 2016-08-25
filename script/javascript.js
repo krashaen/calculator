@@ -6,7 +6,7 @@ var historyElrment = document.getElementById('calcHistoty');
 var resultElement = document.getElementById('equalResult');
 
 function onButtonClick (obj) {
-    var m = obj.getAttribute('data-digit');
+    var m = obj.getAttribute('data-digit'); // rename to digit
 
     if (m) {
         if (operationResult == null) {
@@ -14,7 +14,7 @@ function onButtonClick (obj) {
             innerNumber += m;
         } else {
             historyElrment.textContent = operationResult;
-            historyElrment.textContent += m;
+            historyElrment.textContent += m; // move to first line in this block
             innerNumber += m;
             operationResult = null;
         }
@@ -24,17 +24,22 @@ function onButtonClick (obj) {
 }
 
 function getNumberOfElement (obj) {
-    var lastnumber = parseInt(innerNumber);
+    var lastnumber = parseInt(innerNumber); // to camel case
 
     if (isNaN(lastnumber)) {
         innerNumber = '';
-        return;
+        return; // unnecessary return
     } else {
         numbers.push(lastnumber);
         innerNumber = '';
     }
 }
 
+function onOperationClick() {
+
+}
+
+/* Unify handlers */
 function onPlusClick (obj){
     if (operation != null) return;
     onButtonClick (obj);
@@ -62,9 +67,10 @@ function onDivClick(obj) {
     operation = division;
     getNumberOfElement (obj);
 }
+/* End unify handlers */
 
 function onResetClick(obj) {
-    var m = obj.getAttribute('data-digit');
+    var m = obj.getAttribute('data-digit'); // rename
 
     historyElrment.textContent = m;
     resultElement.value = '0';
@@ -73,7 +79,7 @@ function onResetClick(obj) {
 }
 
 function onEqualClick (obj) {
-    var c = null;
+    var c = null; // rename
     getNumberOfElement (obj);
     c = operation(numbers);
     resultElement.value = c;
