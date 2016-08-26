@@ -6,16 +6,16 @@ var historyElrment = document.getElementById('calcHistoty');
 var resultElement = document.getElementById('equalResult');
 
 function onButtonClick (obj) {
-    var m = obj.getAttribute('data-digit'); // rename to digit
+    var digit = obj.getAttribute('data-digit'); // rename to digit
 
-    if (m) {
+    if (digit) {
         if (operationResult == null) {
-            historyElrment.textContent += m;
-            innerNumber += m;
+            historyElrment.textContent += digit;
+            innerNumber += digit;
         } else {
-            historyElrment.textContent = operationResult;
-            historyElrment.textContent += m; // move to first line in this block
-            innerNumber += m;
+            historyElrment.textContent = operationResult + digit;
+
+            innerNumber += digit;
             operationResult = null;
         }
     }
@@ -24,66 +24,37 @@ function onButtonClick (obj) {
 }
 
 function getNumberOfElement (obj) {
-    var lastnumber = parseInt(innerNumber); // to camel case
+    var lastNumber = parseInt(innerNumber);
 
-    if (isNaN(lastnumber)) {
+    if (isNaN(lastNumber)) {
         innerNumber = '';
-        return; // unnecessary return
     } else {
-        numbers.push(lastnumber);
+        numbers.push(lastNumber);
         innerNumber = '';
     }
 }
 
-function onOperationClick() {
-
-}
-
-/* Unify handlers */
-function onPlusClick (obj){
+function onOperationClick(obj,operationPar) {
     if (operation != null) return;
     onButtonClick (obj);
-    operation = addition;
+    operation = operationPar;
     getNumberOfElement (obj);
-}
 
-function onMinusClick(obj) {
-    if (operation != null) return;
-    onButtonClick (obj);
-    operation = subtraction;
-    getNumberOfElement (obj);
 }
-
-function onMultiplateClick(obj) {
-    if (operation != null) return;
-    onButtonClick (obj);
-    operation = multiplate;
-    getNumberOfElement (obj);
-}
-
-function onDivClick(obj) {
-    if (operation != null) return;
-    onButtonClick (obj);
-    operation = division;
-    getNumberOfElement (obj);
-}
-/* End unify handlers */
 
 function onResetClick(obj) {
-    var m = obj.getAttribute('data-digit'); // rename
-
-    historyElrment.textContent = m;
+    var digit = obj.getAttribute('data-digit');
+    historyElrment.textContent = digit;
     resultElement.value = '0';
     numbers = [];
     operationResult = null;
 }
 
 function onEqualClick (obj) {
-    var c = null; // rename
+    var  currentResult = null; // rename
     getNumberOfElement (obj);
-    c = operation(numbers);
-    resultElement.value = c;
-    numbers = [];
-    numbers[0] = c;
+    currentResult = operation(numbers);
+    resultElement.value = currentResult;
+    numbers = [currentResult];
     operation = null;
 }
